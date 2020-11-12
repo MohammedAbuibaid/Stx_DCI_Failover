@@ -1,0 +1,18 @@
+version: '3'
+services:
+  TempMonSensor:
+    image: 4901-capstone2020/tempmonsensor
+    container_name: TempMonSensor
+    restart: unless-stopped
+  TempMonWeb:
+    image: 4901-capstone2020/tempmonsensor
+    container_name: TempMonWeb
+    volumes:
+     - db:/app/db/
+#    external_links:
+#     - TempMonSensor:sensor
+    restart: unless-stopped
+    ports:
+     - 8080:80
+volumes:
+  db:
