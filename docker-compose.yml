@@ -5,12 +5,10 @@ services:
     container_name: TempMonSensor
     restart: unless-stopped
   TempMonWeb:
-    image: 4901-capstone2020/tempmonsensor
+    image: 4901-capstone2020/tempmonweb
     container_name: TempMonWeb
     volumes:
      - db:/app/db/
-#    external_links:
-#     - TempMonSensor:sensor
     restart: unless-stopped
     ports:
      - 8080:80
