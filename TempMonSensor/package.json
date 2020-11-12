@@ -1,0 +1,14 @@
+{
+	"name": "temp-mon-sensor",
+	"version": "1.0.0",
+	"description": "A simple API for getting temperature readings from a sensor",
+	"author": "Aidan McPeake",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"express": "^4.16.1",
+		"pm2": "^4.4.1"
+	}
+}
