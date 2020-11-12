@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 echo $(pwd)
 docker build ./TempMonWeb/. -t 4901-capstone2020/tempmonweb
 

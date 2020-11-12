@@ -8,7 +8,6 @@ RUN npm install pm2 -g
 RUN apt update && apt -y install python3 python3-pip mongodb
 RUN python3 -m pip install pymongo requests
 
-#ADD node_modules /app/node_modules
 COPY init.py /app/
 ADD files /app/files/
 CMD ["python3", "/app/init.py"]
