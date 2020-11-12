@@ -5,6 +5,6 @@ COPY package*.json /app/
 RUN npm install
 RUN npm install pm2 -g
 
-ADD node_modules /app/node_modules/
+#ADD node_modules /app/node_modules/
 COPY server.js /app/
 CMD ["pm2-runtime", "/app/server.js", "--watch"]

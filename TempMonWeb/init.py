@@ -6,11 +6,11 @@ import time
 server_proc = subprocess.Popen(['pm2', 'start', '/app/files/server.js', '--watch'],
         stdout=subprocess.PIPE,
         universal_newlines=True)
-
+print("Started NodeJS Server")
 mongo_proc = subprocess.Popen(['mongod', '--dbpath', '/app/db/'],
         stdout=subprocess.PIPE,
         universal_newlines=True)
-
+print("Started MongoDB Server")
 client = pymongo.MongoClient("mongodb://localhost:27017/")
 
 while True:
@@ -25,4 +25,4 @@ while True:
         })
     except:
         pass
-    time.sleep(5)
+    time.sleep(60)
