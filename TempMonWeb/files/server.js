@@ -15,74 +15,83 @@ app.use(express.json());
 //=============================================================================
 // Express Route Handlers
 app.get('/', (req, res) => {
-	// Return index.html
-	getLatest().then(resp => {
-		try {
-			resp.toArray((err, result) => {
-				if (err) {
-					res.send(err.message);
-				}
-				res.send(result);
-			});
-		} catch (err) {
-			res.send(err.message);
+	let limit = 10;
+	
+	if (req.query.hasOwnProperty('results')) {
+		if (!isNaN(parseInt(req.query.results, 10)) && parseInt(req.query.results, 10) >= 1) { 
+			limit = parseInt(req.query.results, 10);
+		} else {
+			res.status(400).send("Error: 'results' field must be a valid integer >= 1");
+			return;
 		}
-	});
+	}
+
+	try {
+		getResults(limit).then(response => {
+			if (!response) {
+				res.status(500).send("Error: Database query returned no results");
+				return;
+			}
+
+			response.toArray((err, results) => {
+				if (err) {
+					res.status(500).send(err.message);
+					return;
+				}
+				if (req.query.hasOwnProperty('filter')) {
+					if (results[0].hasOwnProperty(req.query.filter)) {
+						res.send(results.filter((result) => {
+							if (req.query.hasOwnProperty('value') && result[req.query.filter] == parseFloat(req.query.value)) {
+								if (result[req.query.filter] == parseFloat(req.query.value)) {
+									return true;
+								} else {
+									return false;
+								}
+							}
+
+							if (req.query.hasOwnProperty('min') && result[req.query.filter] < parseFloat(req.query.min)) {
+								return false;
+							}
+							if (req.query.hasOwnProperty('max') && result[req.query.filter] > parseFloat(req.query.max)) {
+								return false;
+							}
+							return true
+						}));
+					} else {
+						res.status(400).send(`Error: 'filter' field must include a valid field. Valid fields are: ${Object.keys(results[0])}`);
+					}
+				} else {
+					res.send(results);
+				}
+			});
+		});
+	} catch (err) {
+		res.status(500).send(err.message);
+	}
 });
 
-app.get('/:num', (req, res) => {
-	getNLatest(parseInt(req.params.num)).then(resp => {
-		try {
-			resp.toArray((err, result) => {
-				if (err) {
-					res.send(err.message);
-				}
-				res.send(result);
-			});
-		} catch (err) {
-			res.send(err.message);
-		}
-	});
+app.get('/graph', (req, res) => {
+	res.sendFile('/app/files/source/graph.html');
 });
+
 // ============================================================================
 // Server Definition
 
 http.createServer(app).listen(80, '0.0.0.0', () => {
 	console.log("Running HTTP on port 80");
 });
-console.log("HERE");
+
 //=============================================================================
 // Function Declarations
 
-function getTemperature(filter) {
-
+function filterResults(results, filter) {
+	// Filter is in form ?filter=<field>&min=<value>&max=<value>&value=<value>&results=<value>
+	// Sanitize the filter
+	
 }
 
-async function getNLatest(n) {
-	try {
-		var db = await MongoClient.connect(MongoURL);
-		var dbo = db.db("temp-mon-db");
-		return await dbo.collection('temperatures').find().sort({$natural: -1}).limit(n);
- 	} catch(err) {
-		return err.message;
-	}
-	/*return new Promise((resolve, reject) => {
-		MongoClient.connect(MongoURL).then((err, db) => {
-			if (err) {
-				resolve("HELLO");
-			}
-			try {
-				let dbo = db.db('temp-mon-db');
-				let temps = dbo.collection('temperatures').sort({$natural: -1}).limit(n);
-				db.close();
-			} catch {
-				resolve("OK");
-			}
-			resolve("K");
-		});
-	});*/
-}
-
-async function getLatest() {
-	return getNLatest(1);
+async function getResults(n) {
+	var db = await MongoClient.connect(MongoURL);
+	var dbo = db.db("temp-mon-db");
+	return await dbo.collection('temperatures').find().sort({$natural: -1}).limit(n);
 }

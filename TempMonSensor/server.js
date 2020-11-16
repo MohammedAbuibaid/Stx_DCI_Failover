@@ -8,15 +8,11 @@ var app = express();
 //=============================================================================
 // Express Route Handlers
 app.get('/latest', (req, res) => {
-	res.send(getRandomTemp().toString());
-});
-
-app.get('/fahrenheit', (req, res) => {
-	res.send(toF(getRandomTemp()).toString());
-});
-
-app.get('/*', (req, res) => { // Catch-all (Given https://example.com/<str>, returns <str>.html)
-	res.send("fail");
+	if (req.query.hasOwnProperty('unit') && req.query.unit == 'fahrenheit') {
+		res.send(toF(getRandomTemp()).toString());
+	} else {
+		res.send(getRandomTemp().toString());
+	}
 });
 
 // ============================================================================
