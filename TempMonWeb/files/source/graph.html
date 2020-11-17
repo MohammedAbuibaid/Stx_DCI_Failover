@@ -1,10 +1,25 @@
 <html>
 	<head>
-
+		<style>
+			#canvasDiv {
+				width: 60%;
+			}
+		</style>
 	</head>
 	<body>
-		<canvas id="" width="" height=""></canvas>
+		<div id="canvasDiv">
+			<canvas></canvas>
+		</div>
+		<!-- Add a dropdown select list of devices to display-->
 		<br>
+		<label for="unitSelect">Temperature unit:</label>
+		<br>
+		<select id="unitSelect">
+			<option value="celcius" selected="">Celcius</option>
+			<option value="fahrenheit">Fahrenheit</option>
+			<option value="kelvin">Kelvin</option>
+		</select>
+		<br><br>
 		<label for="filterSelect">Result Filter Method:</label>
 		<br>
 		<select id="filterSelect">
@@ -36,7 +51,9 @@
 			</select>
 		</div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
 <script>
+	// Imports should be local so as to not require internet access
 	var URL = "/";
 
 	window.onload = async () => {
@@ -46,6 +63,7 @@
 			"results": 1000
 		}));
 
+		let canvas = document.querySelector("canvas");
 		let filterSelect = document.querySelector("#filterSelect");
 		let timeSelect = document.querySelector("#timeSelect");
 		let countSelect = document.querySelector("#countSelect");
@@ -76,9 +94,60 @@
 				"results": parseInt(event.target.value)
 			}));
 		});
+	
+		// Graph initialization
 	}
 
 	function updateChart(results) {
+		console.log(results);
+		// In the future, put results in form {"device": [{"temp":X, "timestamp": X}]}
+		document.querySelector("#canvasDiv").innerHTML = "<canvas></canvas>";
+
+		var chart = new Chart(document.querySelector("canvas"), {
+			type: 'line',
+			data: {
+				//labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+				labels: results.map((result) => result.timestamp), // Should add a filter for x number of bins
+				datasets: [
+					{ // One of these per device
+						label: 'RPi1',
+						data: results.map((result) => result.temperature),
+						backgroundColor: [
+							'rgba(54, 162, 235, 0)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)'
+						],
+						borderWidth: 3
+					}/*,
+					{ // One of these per device
+						label: 'RPi2',
+						data: results.map((result) => result.temperature * (Math.random() + 0.5)),
+						backgroundColor: [
+							'rgba(54, 162, 235, 0)'
+						],
+						borderColor: [
+							'rgba(54, 162, 235, 1)'
+						],
+						borderWidth: 3
+					}*/
+				]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}],
+					xAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
 	}
 
 	async function getResults(filter) {
@@ -86,8 +155,20 @@
 		Object.entries(filter).forEach((entry) => {
 			url += `${entry[0]}=${entry[1]}&`;
 		});
-		console.log(url);
+		
+		return await sendFetch(url, "GET", async (resp) => await resp.json());
+	}
 
+	async function sendFetch(url = URL, method = "GET", callback) {
+		return fetch(url, {
+			method: method
+			//headers: headers,
+			//body: JSON.stringify({"body": body, "key": hook})
+		}).then(resp => {
+			if (callback) {
+				return callback(resp);
+			}
+		});
 	}
 
 </script>
