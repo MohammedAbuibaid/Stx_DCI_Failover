@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-web-backend
+spec:
+  selector:
+    matchLabels:
+      app: temp-mon-web-backend
+  template:
+    metadata:
+      labels:
+        app: temp-mon-web-backend
+    spec:
+      # nodeSelector:
+      #   nodeType: iot  # Location of desired node
+      containers:
+      - name: temp-mon-web-frontend
+        image: 4901-capstone2020/tempmonsensor
+        imagePullPolicy: Never
+        ports:
+        
+          
+
