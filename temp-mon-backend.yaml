@@ -15,7 +15,7 @@ spec:
       #   nodeType: iot  # Location of desired node
       containers:
       - name: temp-mon-web-frontend
-        image: 4901-capstone2020/tempmonsensor
+        image: sifotes/4901capstone-tempmonsensor
         imagePullPolicy: Never
         ports:
         

@@ -26,10 +26,9 @@ spec:
         app: temp-mon-web-frontend
     spec:
       # nodeSelector:
-      #   nodeType: subcloud  # Location of desired node
+      #   location: subcloud  # Location of desired node
       containers:
       - name: temp-mon-web-frontend
-        image: 4901-capstone2020/tempmonweb
-        imagePullPolicy: Never
+        image: sifotes/4901capstone-tempmonweb #Public image from DockerHub
         ports: 
         - containerPort: 80
