@@ -34,6 +34,13 @@ spec:
         imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 80
+        volumeMounts:
+        - name: temp-db
+          mountPath: /app/db
         env:
         - name: SENSOR_URL
-          value: http://tempmonsensor:8080
+          value: "http://temp-mon-web-backend"
+      volumes:
+      - name: temp-db
+        emptyDir: {}
+        
