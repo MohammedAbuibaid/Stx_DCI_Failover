@@ -24,7 +24,7 @@ while True:
         temps = client["temp-mon-db"]["temperatures"]
         temps.insert_one({
             "temperature": float(requests.get(os.environ['SENSOR_URL'] + "/latest").text),
-            "timestamp": int(requests.get("http://showcase.api.linx.twenty57.net/UnixTime/tounixtimestamp?datetime=now").json()["UnixTimeStamp"])
+            "timestamp": time.time()
         })
     except:
         pass
