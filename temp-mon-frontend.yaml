@@ -9,14 +9,15 @@ spec:
   ports:
   - port: 80
     targetPort: 80
-  # externalIP:
-  # - 10.0.0.206 #Temporarily hardcoded - this is the "public" IP.
+  externalIPs:
+  - 192.168.1.217 #Temporarily hardcoded - this is the "public" IP.
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: temp-mon-web-frontend
 spec:
+  replicas: 1
   selector:
     matchLabels:
       app: temp-mon-web-frontend
@@ -30,5 +31,9 @@ spec:
       containers:
       - name: temp-mon-web-frontend
         image: sifotes/4901capstone-tempmonweb #Public image from DockerHub
+        imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 80
+        env:
+        - name: SENSOR_URL
+          value: http://tempmonsensor:8080
