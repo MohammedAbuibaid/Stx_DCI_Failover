@@ -5,16 +5,31 @@ var http = require('http');
 
 var app = express();
 
+const { exec } = require("child_process")
+
+const SENSOR_PATH = "/dev/sensor"
 //=============================================================================
 // Express Route Handlers
-app.get('/latest', (req, res) => {
-	if (req.query.hasOwnProperty('unit') && req.query.unit == 'fahrenheit') {
-		res.send(toF(getRandomTemp()).toString());
-	} else {
-		res.send(getRandomTemp().toString());
-	}
+app.get('/', (req, res) => {
+	handle(req, res);
 });
 
+app.get('/latest', (req, res) => {
+	handle(req, res);
+});
+
+function handle(req, res) {
+	getTemp((error, stdout, stderr) => {	
+		if (error) {
+			res.status(500).send("error");
+		} else if (stderr) {
+			res.status(500).send(stderr);
+		} else {
+			res.send((parseInt(stdout) / 1000).toString());
+		}
+	});
+
+}
 // ============================================================================
 // Server Definition
 
@@ -24,14 +39,8 @@ http.createServer(app).listen(80, '0.0.0.0', () => {
 
 //=============================================================================
 // Function Declarations
-function getRandomTemp() { // Defaults to C
-	if (Math.random() < 0.5) {
-		return 25 + (Math.random() * 10);
-	} else {
-		return 25 - (Math.random() * 10);
-	}
-}
-
-function toF(celcius) {
-	return ((celcius / 5) * 9) + 32;
+function getTemp(callback) { // Defaults to C
+	exec(`cat ${SENSOR_PATH} | grep -A 1 "YES" | grep -oE "[0-9]{3,}"`, (error, stdout, stderr) => {
+		callback(error, stdout, stderr);
+	});
 }
