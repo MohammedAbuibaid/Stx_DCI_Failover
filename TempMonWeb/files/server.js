@@ -5,8 +5,8 @@ var http = require('http');
 var mongo = require('mongodb');
 
 var MongoClient = mongo.MongoClient;
-var MongoURL = "mongodb://localhost:27017/";
-
+var MongoURL = process.env.DB_URL;
+console.log(MongoURL);
 var app = express();
 
 app.use('/source', express.static('/app/files/source/')); // Serve static files from the /source directory

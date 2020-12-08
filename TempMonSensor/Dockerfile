@@ -1,4 +1,6 @@
 FROM node:latest
+EXPOSE 80
+
 WORKDIR /app/
 COPY package.json /app/
 

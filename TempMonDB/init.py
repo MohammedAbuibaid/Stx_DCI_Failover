@@ -4,12 +4,7 @@ import requests
 import time
 import os
 
-server_proc = subprocess.Popen(['pm2', 'start', '/app/files/server.js', '--watch'],
-        stdout=subprocess.PIPE,
-        universal_newlines=True)
-print("Started NodeJS Server")
-
-mongo_proc = subprocess.Popen(['mongod', '--dbpath', '/app/db/'],
+mongo_proc = subprocess.Popen(['mongod', '--dbpath', '/db/', '--bind_ip_all'],
         stdout=subprocess.PIPE,
         universal_newlines=True)
 print("Started MongoDB Server")
