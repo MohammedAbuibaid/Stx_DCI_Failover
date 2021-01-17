@@ -25,7 +25,7 @@ function handle(req, res) {
 		} else if (stderr) {
 			res.status(500).send(stderr);
 		} else {
-			res.send((parseInt(stdout) / 1000).toString());
+			res.send(stdout.toString());
 		}
 	});
 
@@ -40,7 +40,19 @@ http.createServer(app).listen(80, '0.0.0.0', () => {
 //=============================================================================
 // Function Declarations
 function getTemp(callback) { // Defaults to C
-	exec(`cat ${SENSOR_PATH} | grep -A 1 "YES" | grep -oE "[0-9]{3,}"`, (error, stdout, stderr) => {
-		callback(error, stdout, stderr);
-	});
+	callback(null, 20 + genTemp(-6, 6, 1), null);
+}
+
+function genTemp(min, max, skew) { // Box-Mueller Transform for generating normally-dist'd RN
+	let u = 0, v = 0;
+	while(u === 0) u = Math.random();
+	while(v === 0) v = Math.random();
+	let num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+
+	num = num / 10.0 + 0.5;
+	if (num > 1 || num < 0) num = getTemp(min, max, skew);
+	num = Math.pow(num, skew);
+	num *= max - min;
+	num += min;
+	return num;
 }
