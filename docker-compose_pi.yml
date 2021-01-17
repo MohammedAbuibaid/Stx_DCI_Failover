@@ -1,10 +1,10 @@
-version: '3'
+version: "2"
 services:
   TempMonSensor:
-    image: temp-mon-sensor
+    image: sifotes/4901capstone-tempmonsensor:demo
     container_name: TempMonSensor
     restart: unless-stopped
-    volumes:
-      - /sys/bus/w1/devices/28-8940561a64ff/w1_slave:/dev/sensor
+#    volumes:
+#      - /sys/bus/w1/devices/28-8940561a64ff/w1_slave:/dev/sensor
     ports:
       - 80:80  
