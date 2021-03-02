@@ -10,4 +10,4 @@ RUN npm install pm2 -g
 
 ADD files /app/files/
 
-CMD ["pm2-runtime", "start", "/app/files/server.js", "--watch"]
+CMD ["pm2-runtime", "start", "/app/files/server.js", "--output", "/dev/stdout", "--error", "/dev/stderr", "--watch"]
