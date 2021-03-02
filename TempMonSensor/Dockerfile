@@ -8,4 +8,4 @@ RUN npm install
 RUN npm install pm2 -g
 
 COPY server.js /app/
-CMD ["pm2-runtime", "/app/server.js", "--watch"]
+CMD ["pm2-runtime", "/app/server.js", "--output", "/dev/stdout", "--error", "/dev/stderr", "--watch"]
