@@ -1,3 +1,4 @@
+
 import subprocess
 import pymongo
 import requests
@@ -23,4 +24,4 @@ while True:
         })
     except:
         pass
-    time.sleep(15)
+    time.sleep(1)
