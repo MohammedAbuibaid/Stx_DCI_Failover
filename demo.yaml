@@ -31,7 +31,7 @@ spec:
       containers:
       - name: temp-mon-web
         image: sifotes/4901capstone-tempmonweb #Public image from DockerHub
-        # imagePullPolicy: IfNotPresent
+        imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 80
         env:
@@ -69,8 +69,8 @@ spec:
       #   location: subcloud  # Location of desired node
       containers:
       - name: temp-mon-web
-        image: sifotes/4901capstone-tempmondb #Public image from DockerHub
-        # imagePullPolicy: IfNotPresent
+        image: sifotes/4901capstone-tempmondb:demo #Public image from DockerHub
+        imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 27017
         env:
@@ -112,6 +112,6 @@ spec:
       containers:
       - name: temp-mon-sensor
         image: sifotes/4901capstone-tempmonsensor:demo #Public image from DockerHub
-        # imagePullPolicy: IfNotPresent
+        imagePullPolicy: IfNotPresent
         ports: 
         - containerPort: 80
