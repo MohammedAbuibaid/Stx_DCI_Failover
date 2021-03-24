@@ -1,0 +1,7 @@
+apiVersion: v2
+name: tempmonweb
+version: 1.0
+description: temperature monitor web client
+
+type: application
+

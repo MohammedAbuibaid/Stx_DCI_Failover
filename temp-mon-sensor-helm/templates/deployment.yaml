@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-sensor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp-mon-sensor
+  template:
+    metadata:
+      labels:
+        app: temp-mon-sensor
+    spec:
+       #nodeSelector:
+       # location: subcloud  # Location of desired node
+      containers:
+      - name: temp-mon-sensor
+        image: sifotes/4901capstone-tempmonsensor:demo #Public image from DockerHub
+        # imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80

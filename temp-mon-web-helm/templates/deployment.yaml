@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp-mon-web
+  template:
+    metadata:
+      labels:
+        app: temp-mon-web
+    spec:
+      # nodeSelector:
+      #   location: subcloud  # Location of desired node
+      containers:
+      - name: temp-mon-web
+        image: sifotes/4901capstone-tempmonweb #Public image from DockerHub
+        # imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
+        env:
+        - name: DB_URL
+          value: "mongodb://temp-mon-db:80"
