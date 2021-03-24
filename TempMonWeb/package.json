@@ -1,0 +1,15 @@
+{
+	"name": "temp-mon-web",
+	"version": "1.0.0",
+	"description": "A frontend UI to display temperature readings and store in a DB",
+	"author": "Aidan McPeake",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"express": "^4.16.1",
+		"mongodb": "^3.6.3",
+		"pm2": "^4.4.1"
+	}
+}

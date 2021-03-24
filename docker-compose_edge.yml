@@ -1,0 +1,23 @@
+version: '3'
+services:
+  TempMonDB:
+    image: temp-mon-db
+    container_name: TempMonDB
+    environment:
+     - SENSOR_URL=http://192.168.7.9 # URL to access Sensor API
+    volumes:
+     - db:/app/db/
+    restart: unless-stopped
+    ports:
+     - "192.168.7.55:27017:27017"
+  
+  TempMonWeb:
+    image: temp-mon-web
+    container_name: TempMonWeb
+    environment:
+     - DB_URL=mongodb://192.168.7.55:27017 # URL to access Sensor API
+    restart: unless-stopped
+    ports:
+     - "192.168.7.55:80:80"
+volumes:
+  db:

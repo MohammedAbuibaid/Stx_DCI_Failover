@@ -1,0 +1,176 @@
+<html>
+	<head>
+		<style>
+			#canvasDiv {
+				width: 60%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="canvasDiv">
+			<canvas></canvas>
+		</div>
+		<!-- Add a dropdown select list of devices to display-->
+		<br>
+		<label for="unitSelect">Temperature unit:</label>
+		<br>
+		<select id="unitSelect">
+			<option value="celcius" selected="">Celcius</option>
+			<option value="fahrenheit">Fahrenheit</option>
+			<option value="kelvin">Kelvin</option>
+		</select>
+		<br><br>
+		<label for="filterSelect">Result Filter Method:</label>
+		<br>
+		<select id="filterSelect">
+			<option value="time" selected="">Filter by time</option>
+			<option value="count">Filter by number of results</option>
+		</select>
+		<br><br>
+		<div id="timeDiv">
+			<label for="timeSelect">Use results from last:</label>
+			<br>
+			<select id="timeSelect">
+				<option value="300">5 minutes</option>
+				<option value="3600" selected="">Hour</option>
+				<option value="43200">12 hours</option>
+				<option value="86400">24 hours</option>
+				<option value="604800">Week</option>
+				<option value="2592000">Month</option>
+			</select>
+		</div>
+		<div id="countDiv" style="display: none;">
+			<label for="countSelect">Use last:</label>
+			<br>
+			<select id="countSelect">
+				<option value=10>10 results</option>
+				<option value=50>50 results</option>
+				<option value=100 selected="">100 results</option>
+				<option value=500>500 results</option>
+				<option value=1000>1000 results</option>
+			</select>
+		</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js"></script>
+<script>
+	// Imports should be local so as to not require internet access
+	var URL = "/";
+
+	window.onload = async () => {
+		updateChart(await getResults({
+			"filter": "timestamp",
+			"min": (Date.now() / 1000) - 3600,
+			"results": 1000
+		}));
+
+		let canvas = document.querySelector("canvas");
+		let filterSelect = document.querySelector("#filterSelect");
+		let timeSelect = document.querySelector("#timeSelect");
+		let countSelect = document.querySelector("#countSelect");
+
+		// Should make it so that when filterSelect is changed, the chart is updated using the current
+		// value of the newly visible selector
+		filterSelect.addEventListener("change", (event) => {
+			if (event.target.value == "count") {
+				document.querySelector("#timeDiv").style.display = "none";
+				document.querySelector("#countDiv").style.display = "block";
+			} else if (event.target.value == "time") {
+				document.querySelector("#timeDiv").style.display = "block";
+				document.querySelector("#countDiv").style.display = "none";
+			}
+		});
+
+
+		timeSelect.addEventListener("change", async (event) => {
+			updateChart(await getResults({
+				"filter": "timestamp",
+				"min": (Date.now() / 1000) - parseInt(event.target.value),
+				"results": 1000
+			}));
+		});
+
+		countSelect.addEventListener("change", async (event) => {
+			updateChart(await getResults({
+				"results": parseInt(event.target.value)
+			}));
+		});
+	
+		// Graph initialization
+	}
+
+	function updateChart(results) {
+		console.log(results);
+		// In the future, put results in form {"device": [{"temp":X, "timestamp": X}]}
+		document.querySelector("#canvasDiv").innerHTML = "<canvas></canvas>";
+
+		var chart = new Chart(document.querySelector("canvas"), {
+			type: 'line',
+			data: {
+				//labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+				labels: results.map((result) => result.timestamp), // Should add a filter for x number of bins
+				datasets: [
+					{ // One of these per device
+						label: 'RPi1',
+						data: results.map((result) => result.temperature),
+						backgroundColor: [
+							'rgba(54, 162, 235, 0)'
+						],
+						borderColor: [
+							'rgba(255, 99, 132, 1)'
+						],
+						borderWidth: 3
+					}/*,
+					{ // One of these per device
+						label: 'RPi2',
+						data: results.map((result) => result.temperature * (Math.random() + 0.5)),
+						backgroundColor: [
+							'rgba(54, 162, 235, 0)'
+						],
+						borderColor: [
+							'rgba(54, 162, 235, 1)'
+						],
+						borderWidth: 3
+					}*/
+				]
+			},
+			options: {
+				scales: {
+					yAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}],
+					xAxes: [{
+						ticks: {
+							beginAtZero: true
+						}
+					}]
+				}
+			}
+		});
+	}
+
+	async function getResults(filter) {
+		let url = URL + "?";
+		Object.entries(filter).forEach((entry) => {
+			url += `${entry[0]}=${entry[1]}&`;
+		});
+		
+		return await sendFetch(url, "GET", async (resp) => await resp.json());
+	}
+
+	async function sendFetch(url = URL, method = "GET", callback) {
+		return fetch(url, {
+			method: method
+			//headers: headers,
+			//body: JSON.stringify({"body": body, "key": hook})
+		}).then(resp => {
+			if (callback) {
+				return callback(resp);
+			}
+		});
+	}
+
+</script>
+	</body>
+</html>

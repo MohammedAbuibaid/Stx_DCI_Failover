@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp-mon-web
+  template:
+    metadata:
+      labels:
+        app: temp-mon-web
+    spec:
+       #nodeSelector:
+         #location: subcloud  # Location of desired node
+      containers:
+      - name: temp-mon-web
+        image: sifotes/4901capstone-tempmonweb:demo #Public image from DockerHub
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
+        env:
+        - name: DB_URL
+          value: "mongodb://temp-mon-db:80"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp-mon-db
+  template:
+    metadata:
+      labels:
+        app: temp-mon-db
+    spec:
+       #nodeSelector:
+        # location: subcloud  # Location of desired node
+      containers:
+      - name: temp-mon-web
+        image: sifotes/4901capstone-tempmondb:demo #Public image from DockerHub
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 27017
+        env:
+        - name: SENSOR_URL
+          value: "http://temp-mon-sensor"
+      volumes:
+      - name: temp-db
+        emptyDir: {}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temp-mon-sensor
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temp-mon-sensor
+  template:
+    metadata:
+      labels:
+        app: temp-mon-sensor
+    spec:
+       #nodeSelector:
+        #location: subcloud  # Location of desired node
+      containers:
+      - name: temp-mon-sensor
+        image: sifotes/4901capstone-tempmonsensor:demo #Public image from DockerHub
+        imagePullPolicy: IfNotPresent
+        ports: 
+        - containerPort: 80
