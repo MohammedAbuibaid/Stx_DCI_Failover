@@ -1,0 +1,7 @@
+apiVersion: v2
+name: tempmonsensor
+version: 1.0
+description: temperature monitor sensor
+
+type: application
+
