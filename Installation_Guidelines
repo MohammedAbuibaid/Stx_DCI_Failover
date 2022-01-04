@@ -55,9 +55,9 @@ End IP: 192.168.202.50
 
 #Update OS:
 
-```
+```  
 sudo apt-get update
-```
+```  
 
 #Clone the StarlingX tools repository:
 sudo apt-get install -y git cd $HOME
