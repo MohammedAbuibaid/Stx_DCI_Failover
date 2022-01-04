@@ -15,5 +15,5 @@ Note: This [temp-mon-helm](https://github.com/MohammedAbuibaid/Stx_DCI_Failover/
 
 3. A polling-based (monitoring and failover functionality)[https://github.com/MohammedAbuibaid/Stx_DCI_Failover/blob/master/monitor.py] to recover from edge workload and/or node failures.
 
-#Contact info
+# Contact Info
 If you have any question about this repo, please feel free to drop me an email at mohammedaa.abuibaid@carleton.ca
