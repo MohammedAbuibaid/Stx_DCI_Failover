@@ -54,9 +54,11 @@ End IP: 192.168.202.50
 #Ensure Host (or VM) has VT-D + VT-X / intel virtualization features enabled. This is required for KVM virtualization.
 
 #Update OS:
+
 ```
 sudo apt-get update
 ```
+
 #Clone the StarlingX tools repository:
 sudo apt-get install -y git cd $HOME
 git clone https://opendev.org/starlingx/tools.git
