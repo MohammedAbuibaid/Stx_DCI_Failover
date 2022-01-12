@@ -1,4 +1,4 @@
-# StarlingX R4.0 Virtual All-In-One Duplex Distributed Cloud Infrastructure Instaltion Guidlines
+# StarlingX R4.0 Virtual All-In-One Duplex Distributed Cloud Infrastructure Installation Guidelines
 
 #Networking Info
 Networks used in yaml configuration files. Can be altered.
