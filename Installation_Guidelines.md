@@ -1,4 +1,4 @@
-StarlingX 4.0 Virtual All-in-one Standard Controller
+# StarlingX R4.0 Virtual All-In-One Duplex Distributed Cloud Infrastructure Instaltion Guidlines
 
 #Networking Info
 Networks used in yaml configuration files. Can be altered.
