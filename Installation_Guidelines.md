@@ -1,4 +1,4 @@
-StarlingX 5.0 Virtual All-in-one Standard Controller
+StarlingX 4.0 Virtual All-in-one Standard Controller
 
 #Networking Info
 Networks used in yaml configuration files. Can be altered.
