@@ -1,4 +1,8 @@
-Last update on 2022 Jan 04\
+Last update on Jan 4, 2022.
+<br/>
+<br/>
+
+## Content:
 
 This repo contains the codes to produce the following artifacts associated with the research paper, ***Edge Cloud Workloads Monitoring and Failover: A Testbed  Implementation and Measurement Study***: 
 
@@ -13,6 +17,3 @@ This repo contains the codes to produce the following artifacts associated with 
 Note: This [temp-mon-helm](https://github.com/MohammedAbuibaid/Stx_DCI_Failover/tree/master/temp-mon) all-in-one helo chart can be used to deploy the application.
 
 3. A polling-based [monitoring and failover functionality](https://github.com/MohammedAbuibaid/Stx_DCI_Failover/blob/master/monitor.py) to recover from edge workload and/or node failures.
-
-# Contact Info
-If you have any question about this repo, please feel free to drop me an email at mohammedaa.abuibaid@carleton.ca
