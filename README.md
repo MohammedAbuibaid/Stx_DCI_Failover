@@ -1,4 +1,3 @@
-# About
 Last update on 2022 Jan 04\
 
 This repo contains the codes to produce the following artifacts associated with the research paper, ***Edge Cloud Workloads Monitoring and Failover: A Testbed  Implementation and Measurement Study***: 
